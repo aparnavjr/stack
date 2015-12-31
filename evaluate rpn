@@ -1,0 +1,66 @@
+public class Solution {
+    public int EvalRPN(string[] tokens) {
+        
+        if(tokens.Length == 0)
+            return 0;
+            
+        int len = tokens.Length;
+        
+        int i =0;
+        int no = 0;
+        Stack<int> st = new Stack<int>();
+        
+        while(i < len)
+        {
+            //Is a operand, push on stack
+            if(int.TryParse(tokens[i], out no) == true)
+            {
+                st.Push(no);
+            }
+                
+            if(tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" || tokens[i] == "/")
+            {
+                if(st.Count !=0)
+                {
+                    int value = Compute(tokens[i], st.Pop(), st.Pop());
+                    st.Push(value);
+                }
+                
+                else
+                {
+                    throw new System.InvalidOperationException("Operation is not valid due to the current state of the object");
+                }
+            }
+            
+            i++;
+            
+        }
+        
+        if(st.Count !=0)
+            return st.Pop();
+        else
+            return 0;
+        
+    }
+    
+    public static int Compute(string operato, int v1, int v2)
+    
+    {  
+        int final = 0;
+        switch(operato)
+        {
+        
+            case "+": final = (v1+v2);   
+                      break;
+            case "-": final =(v2-v1);
+                      break;
+            case "/": final = (v2/v1);
+                      break;
+            case "*":final =(v1*v2);
+                    break;
+        }
+        
+        return final;
+        
+    }
+}
