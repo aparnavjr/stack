@@ -1,0 +1,84 @@
+public class Solution {
+    public int Calculate(string s) {
+        
+        Stack<int> operands = new Stack<int>();
+        Stack<char> operato = new Stack<char>();
+        
+        if(s == null || String.IsNullOrEmpty(s))
+            return 0;
+        
+        int len = s.Length;
+        
+        int i =0;
+        int no =0;
+        while(i < len)
+        {
+            
+            if(int.TryParse(s[i].ToString(), out no) == true)
+            {
+                operands.Push(no);
+            }
+            
+            else 
+            {
+                while(operato.Count!= 0 && IsPrecend(operato.Peek()) >= IsPrecend(s[i]))
+                {
+                    operands.Push(Compute(operato.Pop(), operands.Pop(),operands.Pop()));
+                }
+                
+                operato.Push(s[i]);
+            }
+            
+            i++;
+         
+        }
+        
+        while(operato.Count !=0)
+        {
+            operands.Push(Compute(operato.Pop(), operands.Pop(),operands.Pop()));
+        }
+    
+        int element = operands.Pop();
+        return element;
+    }
+    public static int Compute(char operato, int v1, int v2)
+    
+    {  
+        int final = 0;
+        switch(operato)
+        {
+        
+            case '+': final = (v1+v2);   
+                      break;
+            case '-': final =(v2-v1);
+                      break;
+            case '/': final = (v2/v1);
+                      break;
+            case '*':final =(v1*v2);
+                    break;
+        }
+        
+        return final;
+        
+    }
+    
+    public static int IsPrecend(char ch)
+    {
+        switch (ch)
+        {
+        case '+':
+        case '-':
+            return 1;
+     
+        case '*':
+        case '/':
+            return 2;
+     
+        case '^':
+            return 3;
+        }
+        return -1;
+    }
+        
+    
+}
