@@ -1,0 +1,54 @@
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     public int start;
+ *     public int end;
+ *     public Interval() { start = 0; end = 0; }
+ *     public Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+public class Solution {
+    public IList<Interval> Merge(IList<Interval> intervals) {
+        
+        List<Interval> result = new List<Interval>();
+        
+        if(intervals.Count == 0)
+            return result;
+        
+        Stack<Interval> stack = new Stack<Interval>();
+        
+        intervals = intervals.OrderBy(x=>x.start).ToList();
+        
+        stack.Push(intervals[0]);
+        
+        for(int i = 1; i < intervals.Count ; i++)
+        {
+            
+            Interval top = stack.Peek();
+            if( top.end < intervals[i].start)
+            {
+                stack.Push(intervals[i]);
+            }
+            
+            else if(top.end < intervals[i].end)
+            
+            {
+                top.end = intervals[i].end;
+                stack.Pop();
+                stack.Push(top);
+                
+            }
+            
+            
+        }
+        
+        while(stack.Count!=0)
+        {
+            
+            result.Add(stack.Pop());
+            
+        }
+     
+     return result;   
+    }
+}
